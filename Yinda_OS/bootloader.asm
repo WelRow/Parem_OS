@@ -1,44 +1,28 @@
 
-mov ah, 0x0e
+[org 0x7c00]
 
-mov al, 'H'
-int 0x10
+mov bp, 0x7c00
+mov sp, bp
 
-mov al, 'e'
-int 0x10
-
-mov al, 'l'
-int 0x10
-
-mov al, 'l'
-int 0x10
-
-mov al, 'o'
-int 0x10
-
-mov al, ' '
-int 0x10
-
-mov al, 'W'
-int 0x10
-
-mov al, 'o'
-int 0x10
-
-mov al, 'r'
-int 0x10
-
-mov al, 'l'
-int 0x10
-
-mov al, 'd'
-int 0x10
-
-mov al, '!'
-int 0x10
+mov bx, TestString
+call PrintString
 
 jmp $
 
+PrintString:
+	mov ah, 0x0e
+	.Loop:
+	cmp [bx], byte 0
+	je .Exit
+		mov al, [bx]
+		int 0x10
+		inc bx
+		jmp .Loop
+	.Exit:
+	ret
+
+TestString:
+	db 'This is a Test String',0
 
 times 510-($-$$) db 0
 
